@@ -2,15 +2,15 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Neon Ludo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MARCELO LUDO</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!-- MENU INICIAL -->
     <div id="menu-screen" class="menu-box">
-        <h1>NEON <span class="highlight">LUDO</span></h1>
+        <h1>MARCELO <span class="highlight">LUDO</span></h1>
         <p>Escolha a quantidade de jogadores:</p>
         <button onclick="iniciarJogo(2)">2 Jogadores (1 vs 1 BOT)</button>
         <button onclick="iniciarJogo(3)">3 Jogadores (1 vs 2 BOTS)</button>
@@ -32,7 +32,7 @@
 
         <div class="controls-area">
             <!-- Dado 3D Realista com Pontos -->
-            <div class="dice-scene" onclick="girarDado()">
+            <div class="dice-scene" id="dice-container">
                 <div id="dice-cube" class="cube">
                     <div class="cube-face face-1"><span class="dot"></span></div>
                     <div class="cube-face face-2"><span class="dot"></span><span class="dot"></span></div>
@@ -42,7 +42,7 @@
                     <div class="cube-face face-6"><div class="dot-row"><span class="dot"></span><span class="dot"></span></div><div class="dot-row"><span class="dot"></span><span class="dot"></span></div><div class="dot-row"><span class="dot"></span><span class="dot"></span></div></div>
                 </div>
             </div>
-            <button id="btn-roll" onclick="girarDado()">GIRAR DADO</button>
+            <button id="btn-roll">GIRAR DADO</button>
         </div>
         <div id="status-msg">Gire o dado para iniciar a partida!</div>
     </div>
