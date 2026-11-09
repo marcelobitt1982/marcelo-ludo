@@ -1,10 +1,8 @@
 let totalJogadores = 4;
 let turnoAtual = 0;
-let valorDado = 0;
+let valorDado = 1;
 let aguardandoMovimento = false;
 
-// Cores e posições exatas conforme a imagem ludo.jpg:
-// Verde (Superior Esquerdo), Vermelho (Superior Direito), Amarelo (Inferior Esquerdo), Magenta (Inferior Direito)
 const jogadoresConfig = [
     { nome: 'Verde', cor: 'green', ehBot: false, hex: '#00ff66', casaInicial: 0, entradaHome: 50 },
     { nome: 'Vermelho', cor: 'red', ehBot: true, hex: '#ff0055', casaInicial: 13, entradaHome: 11 },
@@ -15,40 +13,47 @@ const jogadoresConfig = [
 let jogadoresAtivos = [];
 let pecas = {};
 
-// Posições das estrelas (casas seguras) na imagem ludo.jpg
 const casasSeguras = [2, 11, 15, 24, 28, 37, 41, 50];
 
-// Coordenadas das 52 casas do circuito externo no grid 15x15 da imagem
+// Coordenadas das 52 casas no grid 15x15 alinhadas com ludo.jpg
 const trilhaCoordenadas = [
-    [2, 7], [3, 7], [4, 7], [5, 7], [6, 7],         // Verde saindo para a direita
-    [7, 6], [7, 5], [7, 4], [7, 3], [7, 2], [7, 1], // Subindo reta superior
-    [8, 1],                                         // Casa topo
-    [9, 1], [9, 2], [9, 3], [9, 4], [9, 5], [9, 6], // Descendo reta superior (Vermelho)
+    [2, 7], [3, 7], [4, 7], [5, 7], [6, 7],
+    [7, 6], [7, 5], [7, 4], [7, 3], [7, 2], [7, 1],
+    [8, 1],
+    [9, 1], [9, 2], [9, 3], [9, 4], [9, 5], [9, 6],
     [10, 7], [11, 7], [12, 7], [13, 7], [14, 7], [15, 7],
-    [15, 8],                                        // Casa extrema direita
-    [15, 9], [14, 9], [13, 9], [12, 9], [11, 9], [10, 9], // Reta direita (Magenta)
+    [15, 8],
+    [15, 9], [14, 9], [13, 9], [12, 9], [11, 9], [10, 9],
     [9, 10], [9, 11], [9, 12], [9, 13], [9, 14], [9, 15],
-    [8, 15],                                        // Casa fundo
-    [7, 15], [7, 14], [7, 13], [7, 12], [7, 11], [7, 10], // Reta fundo (Amarelo)
+    [8, 15],
+    [7, 15], [7, 14], [7, 13], [7, 12], [7, 11], [7, 10],
     [6, 9], [5, 9], [4, 9], [3, 9], [2, 9], [1, 9],
-    [1, 8],                                         // Casa extrema esquerda
+    [1, 8],
     [1, 7]
 ];
 
-// Posições das retas finais coloridas que entram no centro (HOME)
 const retasFinais = {
-    green:   [[2, 8], [3, 8], [4, 8], [5, 8], [6, 8]],       // Reta final Verde
-    red:     [[8, 2], [8, 3], [8, 4], [8, 5], [8, 6]],       // Reta final Vermelha
-    magenta: [[14, 8], [13, 8], [12, 8], [11, 8], [10, 8]],  // Reta final Magenta
-    yellow:  [[8, 14], [8, 13], [8, 12], [8, 11], [8, 10]]   // Reta final Amarela
+    green:   [[2, 8], [3, 8], [4, 8], [5, 8], [6, 8]],
+    red:     [[8, 2], [8, 3], [8, 4], [8, 5], [8, 6]],
+    magenta: [[14, 8], [13, 8], [12, 8], [11, 8], [10, 8]],
+    yellow:  [[8, 14], [8, 13], [8, 12], [8, 11], [8, 10]]
 };
 
-// Coordenadas das 4 casas da base interna de cada jogador
 const coordenadasBases = {
     green:   [[3, 3], [4, 3], [3, 4], [4, 4]],
     red:     [[12, 3], [13, 3], [12, 4], [13, 4]],
     yellow:  [[3, 12], [4, 12], [3, 13], [4, 13]],
     magenta: [[12, 12], [13, 12], [12, 13], [13, 13]]
+};
+
+// Rotação do Dado 3D conforme o número sorteado
+const rotacoesDado = {
+    1: 'rotateY(0deg) rotateX(0deg)',
+    2: 'rotateY(-90deg) rotateX(0deg)',
+    3: 'rotateY(-180deg) rotateX(0deg)',
+    4: 'rotateY(90deg) rotateX(0deg)',
+    5: 'rotateX(-90deg) rotateY(0deg)',
+    6: 'rotateX(90deg) rotateY(0deg)'
 };
 
 function iniciarJogo(num) {
@@ -57,7 +62,7 @@ function iniciarJogo(num) {
     
     pecas = {};
     jogadoresAtivos.forEach(j => {
-        pecas[j.cor] = [-1, -1, -1, -1]; // -1 = na base
+        pecas[j.cor] = [-1, -1, -1, -1];
     });
 
     document.getElementById('menu-screen').style.display = 'none';
@@ -72,7 +77,6 @@ function gerarGradeTransparente() {
     const board = document.getElementById('board');
     board.innerHTML = '';
 
-    // Criar elementos transparentes na trilha
     trilhaCoordenadas.forEach((coord, index) => {
         const cell = document.createElement('div');
         cell.className = 'cell';
@@ -82,7 +86,6 @@ function gerarGradeTransparente() {
         board.appendChild(cell);
     });
 
-    // Criar elementos nas retas finais
     for (let cor in retasFinais) {
         retasFinais[cor].forEach((coord, idx) => {
             const cell = document.createElement('div');
@@ -94,7 +97,6 @@ function gerarGradeTransparente() {
         });
     }
 
-    // Criar células para as bases
     for (let cor in coordenadasBases) {
         coordenadasBases[cor].forEach((coord, idx) => {
             const cell = document.createElement('div');
@@ -110,10 +112,18 @@ function gerarGradeTransparente() {
 function girarDado() {
     if (aguardandoMovimento) return;
 
-    valorDado = Math.floor(Math.random() * 6) + 1;
-    document.getElementById('dice').innerText = valorDado;
+    const btn = document.getElementById('btn-roll');
+    const cube = document.getElementById('dice-cube');
+    btn.disabled = true;
 
-    processarTurno();
+    // Efeito de giro 3D
+    cube.style.transform = `rotateX(${Math.random() * 720}deg) rotateY(${Math.random() * 720}deg)`;
+
+    setTimeout(() => {
+        valorDado = Math.floor(Math.random() * 6) + 1;
+        cube.style.transform = rotacoesDado[valorDado];
+        processarTurno();
+    }, 600);
 }
 
 function processarTurno() {
@@ -257,6 +267,8 @@ function finalizarJogada(jogarNovamente) {
         document.getElementById('status-msg').innerText = `${j.nome} tirou 6 e joga de novo!`;
         if (j.ehBot) {
             setTimeout(girarDado, 1200);
+        } else {
+            document.getElementById('btn-roll').disabled = false;
         }
     } else {
         proximoTurno();
@@ -269,8 +281,10 @@ function proximoTurno() {
 
     let j = jogadoresAtivos[turnoAtual];
     if (j.ehBot) {
+        document.getElementById('btn-roll').disabled = true;
         setTimeout(girarDado, 1000);
     } else {
+        document.getElementById('btn-roll').disabled = false;
         document.getElementById('status-msg').innerText = 'Sua vez de girar o dado!';
     }
 }
@@ -284,6 +298,7 @@ function atualizarUI() {
 
 function atualizarTabuleiro() {
     document.querySelectorAll('.pawn').forEach(p => p.remove());
+    document.querySelectorAll('.cell-stack').forEach(s => s.remove());
 
     let mapaCelulas = {};
 

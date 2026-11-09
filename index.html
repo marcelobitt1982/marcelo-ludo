@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <!-- MENU INICIAL DE JOGADORES -->
+    <!-- MENU INICIAL -->
     <div id="menu-screen" class="menu-box">
         <h1>NEON <span class="highlight">LUDO</span></h1>
         <p>Escolha a quantidade de jogadores:</p>
@@ -23,15 +23,25 @@
             <h2 id="turn-info">Vez de: <span id="player-name">Verde</span></h2>
         </div>
 
-        <!-- O Tabuleiro usa ludo.jpg perfeitamente como fundo -->
+        <!-- Tabuleiro sobre ludo.jpg com alinhamento preciso -->
         <div class="board-frame">
             <div class="board" id="board">
-                <!-- As 52 casas + retas finais renderizadas de forma transparente por cima da imagem -->
+                <!-- As células e peças serão injetadas exatamente nas posições corretas via JS -->
             </div>
         </div>
 
         <div class="controls-area">
-            <div class="dice-box" id="dice" onclick="girarDado()">?</div>
+            <!-- Dado 3D Realista com Pontos -->
+            <div class="dice-scene" onclick="girarDado()">
+                <div id="dice-cube" class="cube">
+                    <div class="cube-face face-1"><span class="dot"></span></div>
+                    <div class="cube-face face-2"><span class="dot"></span><span class="dot"></span></div>
+                    <div class="cube-face face-3"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                    <div class="cube-face face-4"><div class="dot-row"><span class="dot"></span><span class="dot"></span></div><div class="dot-row"><span class="dot"></span><span class="dot"></span></div></div>
+                    <div class="cube-face face-5"><div class="dot-row"><span class="dot"></span><span class="dot"></span></div><div class="dot-row"><span class="dot"></span></div><div class="dot-row"><span class="dot"></span><span class="dot"></span></div></div>
+                    <div class="cube-face face-6"><div class="dot-row"><span class="dot"></span><span class="dot"></span></div><div class="dot-row"><span class="dot"></span><span class="dot"></span></div><div class="dot-row"><span class="dot"></span><span class="dot"></span></div></div>
+                </div>
+            </div>
             <button id="btn-roll" onclick="girarDado()">GIRAR DADO</button>
         </div>
         <div id="status-msg">Gire o dado para iniciar a partida!</div>
