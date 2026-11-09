@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Neon Ludo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- MENU INICIAL DE JOGADORES -->
+    <div id="menu-screen" class="menu-box">
+        <h1>NEON <span class="highlight">LUDO</span></h1>
+        <p>Escolha a quantidade de jogadores:</p>
+        <button onclick="iniciarJogo(2)">2 Jogadores (1 vs 1 BOT)</button>
+        <button onclick="iniciarJogo(3)">3 Jogadores (1 vs 2 BOTS)</button>
+        <button onclick="iniciarJogo(4)">4 Jogadores (1 vs 3 BOTS)</button>
+    </div>
+
+    <!-- TELA DO JOGO -->
+    <div id="game-screen" class="game-box" style="display: none;">
+        <div class="header">
+            <h2 id="turn-info">Vez de: <span id="player-name">Verde</span></h2>
+        </div>
+
+        <!-- O Tabuleiro usa ludo.jpg perfeitamente como fundo -->
+        <div class="board-frame">
+            <div class="board" id="board">
+                <!-- As 52 casas + retas finais renderizadas de forma transparente por cima da imagem -->
+            </div>
+        </div>
+
+        <div class="controls-area">
+            <div class="dice-box" id="dice" onclick="girarDado()">?</div>
+            <button id="btn-roll" onclick="girarDado()">GIRAR DADO</button>
+        </div>
+        <div id="status-msg">Gire o dado para iniciar a partida!</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
