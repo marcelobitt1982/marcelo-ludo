@@ -180,7 +180,7 @@ function clicarPeca(cor, index) {
             }
             finalizarJogada(valorDado === 6);
         } else {
-            document.getElementById('status-msg').innerText = 'Número exato no dado necessário para entrar no Home!';
+            document.getElementById('status-msg').innerText = 'Número exato no dado necessário para entrar no centro!';
         }
     }
 }
@@ -189,7 +189,7 @@ function calcularNovaPosicao(atual, dado, config) {
     let pos = atual;
     for (let i = 0; i < dado; i++) {
         if (pos === config.entradaHome) {
-            pos = 52;
+            pos = 52; // Entra na reta final (índice 0)
         } else if (pos >= 52 && pos < 56) {
             pos++;
         } else if (pos === 56) {
