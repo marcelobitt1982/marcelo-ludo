@@ -306,9 +306,23 @@ function atualizarUI() {
     });
 }
 
+function inicializarPecasDOM() {
+    // Cria os peões no DOM uma única vez se não existirem
+    for (let cor in pecas) {
+        for (let i = 0; i < 4; i++) {
+            if (!document.getElementById(`pawn-${cor}-${i}`)) {
+                const pawn = document.createElement('div');
+                pawn.className = `pawn ${cor}-pawn`;
+                pawn.id = `pawn-${cor}-${i}`;
+                pawn.onclick = () => clicarPeca(cor, i);
+            }
+        }
+    }
+}
+
 function atualizarTabuleiro() {
-    document.querySelectorAll('.pawn').forEach(p => p.remove());
-    document.querySelectorAll('.cell-stack').forEach(s => s.remove());
+    // Garante que os elementos dos peões existem
+    inicializarPecasDOM();
 
     let mapaCelulas = {};
 
@@ -333,6 +347,10 @@ function atualizarTabuleiro() {
         });
     }
 
+    // Limpa apenas os containers de pilha antigos
+    document.querySelectorAll('.cell-stack').forEach(s => s.remove());
+
+    // Recria os containers de pilha e move os peões existentes para lá de forma fluida
     for (let chave in mapaCelulas) {
         let cell = document.getElementById(chave);
         if (cell) {
@@ -340,9 +358,16 @@ function atualizarTabuleiro() {
             stackContainer.className = 'cell-stack';
 
             mapaCelulas[chave].forEach(item => {
-                const pawn = document.createElement('div');
-                pawn.className = `pawn ${item.cor}-pawn`;
-                pawn.onclick = () => clicarPeca(item.cor, item.index);
+                const pawnId = `pawn-${item.cor}-${item.index}`;
+                let pawn = document.getElementById(pawnId);
+                
+                if (!pawn) {
+                    pawn = document.createElement('div');
+                    pawn.className = `pawn ${item.cor}-pawn`;
+                    pawn.id = pawnId;
+                    pawn.onclick = () => clicarPeca(item.cor, item.index);
+                }
+
                 stackContainer.appendChild(pawn);
             });
 
