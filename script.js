@@ -15,7 +15,6 @@ let pecas = {};
 
 const casasSeguras = [2, 11, 15, 24, 28, 37, 41, 50];
 
-// Coordenadas das 52 casas no grid 15x15 alinhadas com ludo.jpg
 const trilhaCoordenadas = [
     [2, 7], [3, 7], [4, 7], [5, 7], [6, 7],
     [7, 6], [7, 5], [7, 4], [7, 3], [7, 2], [7, 1],
@@ -46,7 +45,6 @@ const coordenadasBases = {
     magenta: [[12, 12], [13, 12], [12, 13], [13, 13]]
 };
 
-// Rotação do Dado 3D conforme o número sorteado
 const rotacoesDado = {
     1: 'rotateY(0deg) rotateX(0deg)',
     2: 'rotateY(-90deg) rotateX(0deg)',
@@ -116,7 +114,6 @@ function girarDado() {
     const cube = document.getElementById('dice-cube');
     btn.disabled = true;
 
-    // Efeito de giro 3D
     cube.style.transform = `rotateX(${Math.random() * 720}deg) rotateY(${Math.random() * 720}deg)`;
 
     setTimeout(() => {
@@ -189,7 +186,7 @@ function calcularNovaPosicao(atual, dado, config) {
     let pos = atual;
     for (let i = 0; i < dado; i++) {
         if (pos === config.entradaHome) {
-            pos = 52; // Entra na reta final (índice 0)
+            pos = 52;
         } else if (pos >= 52 && pos < 56) {
             pos++;
         } else if (pos === 56) {
@@ -294,6 +291,19 @@ function atualizarUI() {
     let span = document.getElementById('player-name');
     span.innerText = j.nome + (j.ehBot ? ' (BOT)' : ' (Você)');
     span.style.color = j.hex;
+
+    // Altera dinamicamente as cores do dado tridimensional de acordo com o jogador da vez
+    const faces = document.querySelectorAll('.cube-face');
+    faces.forEach(face => {
+        face.style.borderColor = j.hex;
+        face.style.boxShadow = `inset 0 0 10px ${j.hex}66, 0 0 8px ${j.hex}88`;
+    });
+
+    const dots = document.querySelectorAll('.dot');
+    dots.forEach(dot => {
+        dot.style.background = '#fff';
+        dot.style.boxShadow = `0 0 5px #fff, 0 0 8px ${j.hex}`;
+    });
 }
 
 function atualizarTabuleiro() {
