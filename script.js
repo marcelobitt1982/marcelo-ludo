@@ -56,23 +56,6 @@ const rotacoesDado = {
     6: 'rotateX(90deg) rotateY(0deg)'
 };
 
-// Vinculação de eventos de toque e clique ao carregar a página
-window.addEventListener('DOMContentLoaded', () => {
-    const btnRoll = document.getElementById('btn-roll');
-    const diceContainer = document.getElementById('dice-container');
-
-    const acaoGirar = (e) => {
-        e.preventDefault();
-        girarDado();
-    };
-
-    btnRoll.addEventListener('click', acaoGirar);
-    btnRoll.addEventListener('touchstart', acaoGirar, { passive: false });
-
-    diceContainer.addEventListener('click', acaoGirar);
-    diceContainer.addEventListener('touchstart', acaoGirar, { passive: false });
-});
-
 function iniciarJogo(num) {
     totalJogadores = num;
     jogadoresAtivos = jogadoresConfig.slice(0, num);
@@ -128,9 +111,6 @@ function gerarGradeTransparente() {
 
 function girarDado() {
     if (aguardandoMovimento) return;
-
-    let j = jogadoresAtivos[turnoAtual];
-    if (j.ehBot) return; // Impede o jogador de clicar durante a vez do BOT
 
     const btn = document.getElementById('btn-roll');
     const cube = document.getElementById('dice-cube');
@@ -352,14 +332,7 @@ function atualizarTabuleiro() {
             mapaCelulas[chave].forEach(item => {
                 const pawn = document.createElement('div');
                 pawn.className = `pawn ${item.cor}-pawn`;
-                
-                // Suporte a toque nas peças para dispositivos móveis
-                pawn.addEventListener('click', () => clicarPeca(item.cor, item.index));
-                pawn.addEventListener('touchstart', (e) => {
-                    e.stopPropagation();
-                    clicarPeca(item.cor, item.index);
-                }, { passive: true });
-
+                pawn.onclick = () => clicarPeca(item.cor, item.index);
                 stackContainer.appendChild(pawn);
             });
 
