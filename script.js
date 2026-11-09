@@ -15,6 +15,7 @@ let pecas = {};
 
 const casasSeguras = [2, 11, 15, 24, 28, 37, 41, 50];
 
+// Coordenadas das 52 casas no grid 15x15 alinhadas com ludo.jpg
 const trilhaCoordenadas = [
     [2, 7], [3, 7], [4, 7], [5, 7], [6, 7],
     [7, 6], [7, 5], [7, 4], [7, 3], [7, 2], [7, 1],
@@ -38,14 +39,14 @@ const retasFinais = {
     yellow:  [[8, 14], [8, 13], [8, 12], [8, 11], [8, 10]]
 };
 
-// Coordenadas exatas das 4 casas/círculos internos das bases em ludo.jpg
 const coordenadasBases = {
-    green:   [[2.5, 2.5], [4.5, 2.5], [2.5, 4.5], [4.5, 4.5]],
-    red:     [[11.5, 2.5], [13.5, 2.5], [11.5, 4.5], [13.5, 4.5]],
-    yellow:  [[2.5, 11.5], [4.5, 11.5], [2.5, 13.5], [4.5, 13.5]],
-    magenta: [[11.5, 11.5], [13.5, 11.5], [11.5, 13.5], [13.5, 13.5]]
+    green:   [[3, 3], [4, 3], [3, 4], [4, 4]],
+    red:     [[12, 3], [13, 3], [12, 4], [13, 4]],
+    yellow:  [[3, 12], [4, 12], [3, 13], [4, 13]],
+    magenta: [[12, 12], [13, 12], [12, 13], [13, 13]]
 };
 
+// Rotação do Dado 3D conforme o número sorteado
 const rotacoesDado = {
     1: 'rotateY(0deg) rotateX(0deg)',
     2: 'rotateY(-90deg) rotateX(0deg)',
@@ -99,7 +100,7 @@ function gerarGradeTransparente() {
     for (let cor in coordenadasBases) {
         coordenadasBases[cor].forEach((coord, idx) => {
             const cell = document.createElement('div');
-            cell.className = 'base-cell';
+            cell.className = 'cell';
             cell.style.gridColumn = coord[0];
             cell.style.gridRow = coord[1];
             cell.id = `base-${cor}-${idx}`;
@@ -115,6 +116,7 @@ function girarDado() {
     const cube = document.getElementById('dice-cube');
     btn.disabled = true;
 
+    // Efeito de giro 3D
     cube.style.transform = `rotateX(${Math.random() * 720}deg) rotateY(${Math.random() * 720}deg)`;
 
     setTimeout(() => {
@@ -324,28 +326,17 @@ function atualizarTabuleiro() {
     for (let chave in mapaCelulas) {
         let cell = document.getElementById(chave);
         if (cell) {
-            if (chave.startsWith('base-')) {
-                // Na base, insere diretamente o peão centralizado no círculo correspondente
-                mapaCelulas[chave].forEach(item => {
-                    const pawn = document.createElement('div');
-                    pawn.className = `pawn ${item.cor}-pawn`;
-                    pawn.onclick = () => clicarPeca(item.cor, item.index);
-                    cell.appendChild(pawn);
-                });
-            } else {
-                // Na pista, usa o empilhamento inteligente
-                let stackContainer = document.createElement('div');
-                stackContainer.className = 'cell-stack';
+            let stackContainer = document.createElement('div');
+            stackContainer.className = 'cell-stack';
 
-                mapaCelulas[chave].forEach(item => {
-                    const pawn = document.createElement('div');
-                    pawn.className = `pawn ${item.cor}-pawn`;
-                    pawn.onclick = () => clicarPeca(item.cor, item.index);
-                    stackContainer.appendChild(pawn);
-                });
+            mapaCelulas[chave].forEach(item => {
+                const pawn = document.createElement('div');
+                pawn.className = `pawn ${item.cor}-pawn`;
+                pawn.onclick = () => clicarPeca(item.cor, item.index);
+                stackContainer.appendChild(pawn);
+            });
 
-                cell.appendChild(stackContainer);
-            }
+            cell.appendChild(stackContainer);
         }
     }
 }
